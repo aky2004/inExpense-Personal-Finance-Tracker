@@ -1,7 +1,16 @@
 import axios from 'axios';
 
+// Support VITE_API_URL from environment when deployed (e.g. on Vercel connecting to Render backend)
+const rawBaseURL = import.meta.env.VITE_API_URL;
+let baseURL = '/api';
+
+if (rawBaseURL) {
+  const cleanUrl = rawBaseURL.replace(/\/+$/, '');
+  baseURL = cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+}
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL,
 });
 
 // Attach Authorization Bearer token to requests
